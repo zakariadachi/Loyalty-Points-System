@@ -1,5 +1,7 @@
 <IfModule mod_rewrite.c>
+    Options -MultiViews
     RewriteEngine On
+    RewriteBase /Loyalty%20Points%20System/public/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php [QSA,L]

@@ -16,8 +16,17 @@ class Router
 
     public function dispatch($uri)
     {
-        // Remove query string and trailing slashes
-        $uri = parse_url($uri, PHP_URL_PATH);
+        // Decode URI (important for spaces %20)
+        $uri = urldecode(parse_url($uri, PHP_URL_PATH));
+        
+        // Get the directory where index.php is located
+        $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+        
+        // Strip the script directory from the URI
+        if ($scriptDir !== '/' && strpos($uri, $scriptDir) === 0) {
+            $uri = substr($uri, strlen($scriptDir));
+        }
+
         $uri = rtrim($uri, '/');
         if (empty($uri)) {
             $uri = '/';
@@ -35,7 +44,6 @@ class Router
             }
         }
 
-        // Simple 404
         header("HTTP/1.0 404 Not Found");
         echo "404 Not Found";
     }
