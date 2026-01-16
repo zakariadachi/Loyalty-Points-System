@@ -54,3 +54,4 @@ class Reward
         return $stmt->execute(['id' => $id]);
     }
 }
+
