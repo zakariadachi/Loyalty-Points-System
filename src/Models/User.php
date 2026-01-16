@@ -33,3 +33,4 @@ class User
         return password_verify($password, $hash);
     }
 }
+
