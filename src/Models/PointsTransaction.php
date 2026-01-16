@@ -8,7 +8,7 @@ use PDO;
 class PointsTransaction
 {
     private $db;
-    const POINTS_PER_EURO = 0.1; // 10 points per 100€ -> 0.1 pt per 1€
+    const POINTS_PER_EURO = 0.1;
 
     public function __construct()
     {
@@ -17,14 +17,13 @@ class PointsTransaction
 
     public function calculatePoints(float $amount): int
     {
-        return floor($amount * self::POINTS_PER_EURO * 10) / 10 * 10; // Simple logic: 10pts / 100€
-        // Actually the rule says 10pts / 100€, so 1pt / 10€.
+        return floor($amount * self::POINTS_PER_EURO * 10) / 10 * 10;
         return floor($amount / 10); 
     }
 
     public function addTransaction($userId, $amount, $description, $type = 'earn')
     {
-        $points = ($type === 'earn') ? $this->calculatePoints($amount) : -$amount; // amount is points for redeem
+        $points = ($type === 'earn') ? $this->calculatePoints($amount) : -$amount;
         
         $sql = "INSERT INTO points_transactions (user_id, amount, points, type, description) 
                 VALUES (:user_id, :amount, :points, :type, :description)";
