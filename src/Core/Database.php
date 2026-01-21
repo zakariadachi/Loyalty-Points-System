@@ -12,11 +12,11 @@ class Database
 
     private function __construct()
     {
-        $config = require_once dirname(__DIR__, 2) . '/config/database.php';
+        $config = require_once dirname(__DIR__, 2) . '/config/db.php';
         
         try {
             $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8mb4";
-            $this->connection = new PDO($dsn, $config['user'], $config['pass'], [
+            $this->connection = new PDO($dsn, $config['user'], $config['password'], [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false,

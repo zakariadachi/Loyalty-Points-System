@@ -4,6 +4,7 @@ namespace App\Core;
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use App\Models\Cart;
 
 abstract class Controller
 {
@@ -26,6 +27,10 @@ abstract class Controller
         $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
         $baseUrl = ($scriptDir === '/') ? '' : $scriptDir;
         $this->twig->addGlobal('base_url', $baseUrl);
+
+        // Cart info
+        $cart = new Cart();
+        $this->twig->addGlobal('cart_count', $cart->getCount());
     }
 
     protected function render($template, $data = [])
