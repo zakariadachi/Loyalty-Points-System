@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique - ShopEasy
+{% endblock %}
+
+{% block body %}
+	<div class="shop-header">
+		<h1>Notre Boutique</h1>
+		<p>Gagnez 10 points pour chaque 100€ dépensés !</p>
+	</div>
+
+	<div class="products-grid">
+		{% for product in products %}
+			<div class="glass-card product-card">
+				<div class="product-icon">{{ product.icon }}</div>
+				<h3>{{ product.name }}</h3>
+				<p class="description">{{ product.description }}</p>
+				<p class="price">{{ product.price|number_format(2, ',', ' ') }}
+					€</p>
+
+				<form action="{{ base_url }}/shop/add" method="POST" class="add-to-cart-form">
+					<input type="hidden" name="product_id" value="{{ product.id }}">
+					<div class="quantity-selector">
+						<button type="button" class="qty-btn minus">-</button>
+						<input type="number" name="quantity" value="1" min="1" readonly>
+						<button type="button" class="qty-btn plus">+</button>
+					</div>
+					<button type="submit" class="btn btn-primary">Ajouter au panier</button>
+				</form>
+			</div>
+		{% endfor %}
+	</div>
+
+	<style>
+		.shop-header {
+			text-align: center;
+			margin-bottom: 3rem;
+		}
+
+		.shop-header h1 {
+			font-size: 3rem;
+			margin-bottom: 0.5rem;
+			background: linear-gradient(to right, #818cf8, #c084fc);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		.products-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 2rem;
+		}
+
+		.product-card {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			transition: transform 0.3s;
+		}
+
+		.product-card:hover {
+			transform: translateY(-10px);
+		}
+
+		.product-icon {
+			width: 60px;
+			height: 60px;
+			background: var(--primary);
+			border-radius: 12px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: 700;
+			font-size: 1.5rem;
+			margin-bottom: 1.5rem;
+			box-shadow: 0 8px 16px rgba(99, 102, 241, 0.4);
+		}
+
+		.product-card h3 {
+			margin-bottom: 0.5rem;
+		}
+
+		.description {
+			color: var(--text-muted);
+			font-size: 0.9rem;
+			margin-bottom: 1.5rem;
+			flex-grow: 1;
+		}
+
+		.price {
+			font-size: 1.5rem;
+			font-weight: 700;
+			color: var(--text-main);
+			margin-bottom: 1.5rem;
+		}
+
+		.add-to-cart-form {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+		}
+
+		.quantity-selector {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 8px;
+			overflow: hidden;
+			border: 1px solid var(--glass-border);
+		}
+
+		.qty-btn {
+			background: none;
+			border: none;
+			color: white;
+			padding: 0.5rem 1rem;
+			cursor: pointer;
+			font-size: 1.2rem;
+			transition: background 0.3s;
+		}
+
+		.qty-btn:hover {
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.quantity-selector input {
+			width: 40px;
+			text-align: center;
+			background: none;
+			border: none;
+			color: white;
+			font-weight: 600;
+		}
+	</style>
+
+	<script>
+		document.querySelectorAll('.quantity-selector').forEach(selector => {
+const input = selector.querySelector('input');
+const minus = selector.querySelector('.minus');
+const plus = selector.querySelector('.plus');
+
+minus.addEventListener('click', () => {
+if (input.value > 1) {
+input.value = parseInt(input.value) - 1;
+}
+});
+
+plus.addEventListener('click', () => {
+input.value = parseInt(input.value) + 1;
+});
+});
+	</script>
+{% endblock %}

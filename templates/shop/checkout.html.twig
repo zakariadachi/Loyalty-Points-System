@@ -1,0 +1,187 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement - ShopEasy
+{% endblock %}
+
+{% block body %}
+	<div class="checkout-container">
+		<h1>Paiement</h1>
+
+		<div class="checkout-grid">
+			<div class="checkout-form-container glass-card">
+				<h2>Informations de paiement</h2>
+
+				{% if checkout_error %}
+					<div class="error-banner">{{ checkout_error }}</div>
+				{% endif %}
+
+				<form action="{{ base_url }}/shop/process-checkout" method="POST" class="checkout-form">
+					<div class="form-group">
+						<label for="card_name">Nom sur la carte</label>
+						<input type="text" id="card_name" name="card_name" required placeholder="M. Jean Dupont">
+					</div>
+
+					<div class="form-group">
+						<label for="card_number">Numéro de carte</label>
+						<input type="text" id="card_number" name="card_number" required placeholder="**** **** **** ****">
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<label for="card_expiry">Date d'expiration</label>
+							<input type="text" id="card_expiry" name="card_expiry" required placeholder="MM/AA">
+						</div>
+						<div class="form-group">
+							<label for="card_cvv">CVV</label>
+							<input type="text" id="card_cvv" name="card_cvv" required placeholder="123">
+						</div>
+					</div>
+
+					<div class="loyalty-info">
+						<p>En finalisant cet achat, vous gagnerez
+							<span class="points-highlight">{{ loyalty_points }}
+								points</span>
+							de fidélité !</p>
+					</div>
+
+					<button type="submit" class="btn btn-primary submit-btn">Payer
+						{{ cart_total|number_format(2, ',', ' ') }}
+						€</button>
+				</form>
+			</div>
+
+			<div class="order-summary glass-card">
+				<h2>Votre commande</h2>
+				<div class="summary-items">
+					{% for item in cart_items %}
+						<div class="summary-item">
+							<span>{{ item.quantity }}x
+								{{ item.name }}</span>
+							<span>{{ (item.price * item.quantity)|number_format(2, ',', ' ') }}
+								€</span>
+						</div>
+					{% endfor %}
+				</div>
+				<div class="summary-total">
+					<span>Total à régler</span>
+					<span>{{ cart_total|number_format(2, ',', ' ') }}
+						€</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.checkout-container h1 {
+			margin-bottom: 2rem;
+		}
+
+		.checkout-grid {
+			display: grid;
+			grid-template-columns: 1fr 400px;
+			gap: 2rem;
+		}
+
+		.checkout-form {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+			margin-top: 1.5rem;
+		}
+
+		.form-group {
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.form-row {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1rem;
+		}
+
+		.form-group label {
+			font-weight: 600;
+			color: var(--text-muted);
+		}
+
+		.form-group input {
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid var(--glass-border);
+			border-radius: 8px;
+			padding: 0.8rem 1rem;
+			color: white;
+			font-family: inherit;
+			font-size: 1rem;
+		}
+
+		.form-group input:focus {
+			outline: none;
+			border-color: var(--primary);
+			box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+		}
+
+		.error-banner {
+			background: rgba(239, 68, 68, 0.1);
+			color: #ef4444;
+			padding: 1rem;
+			border-radius: 8px;
+			border: 1px solid rgba(239, 68, 68, 0.2);
+			margin-top: 1rem;
+		}
+
+		.loyalty-info {
+			background: rgba(251, 191, 36, 0.1);
+			padding: 1rem;
+			border-radius: 8px;
+			border: 1px solid rgba(251, 191, 36, 0.2);
+			text-align: center;
+		}
+
+		.points-highlight {
+			color: #fbbf24;
+			font-weight: 700;
+		}
+
+		.submit-btn {
+			padding: 1rem;
+			font-size: 1.1rem;
+		}
+
+		.order-summary h2 {
+			font-size: 1.2rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.summary-items {
+			display: flex;
+			flex-direction: column;
+			gap: 0.8rem;
+			margin-bottom: 1.5rem;
+			padding-bottom: 1.5rem;
+			border-bottom: 1px solid var(--glass-border);
+		}
+
+		.summary-item {
+			display: flex;
+			justify-content: space-between;
+			color: var(--text-muted);
+			font-size: 0.95rem;
+		}
+
+		.summary-total {
+			display: flex;
+			justify-content: space-between;
+			font-weight: 700;
+			font-size: 1.2rem;
+			color: var(--primary);
+		}
+
+		@media(max-width: 992px) {
+			.checkout-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+{% endblock %}

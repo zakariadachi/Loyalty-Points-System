@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation d'achat - ShopEasy
+{% endblock %}
+
+{% block body %}
+	<div class="result-container">
+		<div class="glass-card success-card">
+			<div class="success-icon">✓</div>
+			<h1>Merci pour votre achat !</h1>
+			<p>Votre commande a été traitée avec succès.</p>
+
+			<div class="points-earned">
+				<span class="earned-label">Points gagnés lors de cette commande :</span>
+				<span class="earned-value">+{{ purchase.points_earned }}
+					pts</span>
+			</div>
+
+			<div class="points-status">
+				<div class="status-item">
+					<span class="label">Ancien solde</span>
+					<span class="value">{{ purchase.previous_points }}
+						pts</span>
+				</div>
+				<div class="arrow">→</div>
+				<div class="status-item">
+					<span class="label">Nouveau solde</span>
+					<span class="value highlight">{{ purchase.new_points }}
+						pts</span>
+				</div>
+			</div>
+
+			<div class="actions">
+				<a href="{{ base_url }}/shop" class="btn btn-primary">Retour à la boutique</a>
+				<a href="{{ base_url }}/dashboard" class="btn">Accéder au tableau de bord</a>
+			</div>
+		</div>
+	</div>
+
+	<style>
+		.result-container {
+			display: flex;
+			justify-content: center;
+			padding: 4rem 0;
+		}
+
+		.success-card {
+			max-width: 600px;
+			width: 100%;
+			text-align: center;
+			padding: 4rem !important;
+		}
+
+		.success-icon {
+			width: 80px;
+			height: 80px;
+			background: var(--success);
+			color: white;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2.5rem;
+			margin: 0 auto 2rem;
+			box-shadow: 0 8px 16px rgba(16, 185, 129, 0.4);
+		}
+
+		.success-card h1 {
+			margin-bottom: 1rem;
+		}
+
+		.success-card p {
+			color: var(--text-muted);
+			margin-bottom: 2.5rem;
+		}
+
+		.points-earned {
+			background: rgba(16, 185, 129, 0.1);
+			border: 1px solid rgba(16, 185, 129, 0.2);
+			padding: 1.5rem;
+			border-radius: 12px;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+			margin-bottom: 2rem;
+		}
+
+		.earned-label {
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
+
+		.earned-value {
+			font-size: 2rem;
+			font-weight: 700;
+			color: var(--success);
+		}
+
+		.points-status {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 2rem;
+			margin-bottom: 3rem;
+			padding: 1.5rem;
+			background: rgba(255, 255, 255, 0.03);
+			border-radius: 12px;
+		}
+
+		.status-item {
+			display: flex;
+			flex-direction: column;
+			gap: 0.3rem;
+		}
+
+		.status-item .label {
+			font-size: 0.8rem;
+			color: var(--text-muted);
+		}
+
+		.status-item .value {
+			font-weight: 700;
+			font-size: 1.2rem;
+		}
+
+		.value.highlight {
+			color: #fbbf24;
+		}
+
+		.arrow {
+			font-size: 1.5rem;
+			color: var(--text-muted);
+		}
+
+		.actions {
+			display: flex;
+			gap: 1rem;
+			justify-content: center;
+		}
+	</style>
+{% endblock %}
