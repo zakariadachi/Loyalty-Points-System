@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ShopEasy - Commande confirmée{% endblock %}
+
+{% block content %}
+    <div class="purchase-result">
+        <div class="success-icon">Succès</div>
+        <h1>Commande confirmée !</h1>
+        <p class="success-message">Merci pour votre achat, {{ user.name }} !</p>
+
+        <div class="result-card">
+            <h2>Détails de votre commande</h2>
+            <p class="order-date">Date: {{ purchase.date }}</p>
+            
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in purchase.items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ (item.price * item.quantity)|number_format(2, '.', ' ') }} $</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"><strong>Total payé</strong></td>
+                        <td><strong>{{ purchase.total|number_format(2, '.', ' ') }} $</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="points-result-card">
+            <h2>Points de fidélité</h2>
+            
+            <div class="points-summary">
+                <div class="points-item">
+                    <span class="points-label">Points gagnés avec cet achat:</span>
+                    <span class="points-value earned">+{{ purchase.points_earned }} points</span>
+                </div>
+                <div class="points-item">
+                    <span class="points-label">Ancien solde:</span>
+                    <span class="points-value">{{ purchase.previous_points }} points</span>
+                </div>
+                <div class="points-item highlight">
+                    <span class="points-label">Nouveau solde:</span>
+                    <span class="points-value new-balance">{{ purchase.new_points }} points</span>
+                </div>
+            </div>
+
+            <p class="points-calculation">
+                Calcul: {{ purchase.total|number_format(2, '.', ' ') }} $ / 100 = {{ (purchase.total / 100)|round(0, 'floor') }} tranches x 10 = <strong>{{ purchase.points_earned }} points</strong>
+            </p>
+        </div>
+
+        <div class="result-actions">
+            <a href="/shop" class="btn btn-primary btn-large">Continuer mes achats</a>
+            <a href="/shop/reset" class="btn btn-secondary">Réinitialiser la session</a>
+        </div>
+    </div>
+{% endblock %}

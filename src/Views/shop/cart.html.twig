@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ShopEasy - Panier{% endblock %}
+
+{% block content %}
+    <h1>Votre Panier</h1>
+
+    {% if cart_items is empty %}
+        <div class="empty-cart">
+            <p class="empty-cart-icon">Panier vide</p>
+            <p>Votre panier est vide</p>
+            <a href="/shop" class="btn btn-primary">Continuer vos achats</a>
+        </div>
+    {% else %}
+        <div class="cart-content">
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td class="product-name">{{ item.name }}</td>
+                            <td>{{ item.price|number_format(2, '.', ' ') }} $</td>
+                            <td>
+                                <form action="/shop/update-cart" method="POST" class="update-qty-form">
+                                    <input type="hidden" name="product_id" value="{{ item.id }}">
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="99" class="qty-input">
+                                    <button type="submit" class="btn btn-small">Mettre à jour</button>
+                                </form>
+                            </td>
+                            <td class="subtotal">{{ (item.price * item.quantity)|number_format(2, '.', ' ') }} $</td>
+                            <td>
+                                <form action="/shop/remove-from-cart" method="POST" class="remove-form">
+                                    <input type="hidden" name="product_id" value="{{ item.id }}">
+                                    <button type="submit" class="btn btn-danger btn-small">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Total du panier:</span>
+                    <span class="total-amount">{{ cart_total|number_format(2, '.', ' ') }} $</span>
+                </div>
+                <div class="summary-row points-row">
+                    <span>Points à gagner:</span>
+                    <span class="points-earned">{{ loyalty_points }} points</span>
+                </div>
+                <p class="points-info">10 points par tranche de 100$ dépensés</p>
+                
+                <div class="cart-actions">
+                    <a href="/shop" class="btn btn-secondary">Continuer mes achats</a>
+                    <a href="/shop/checkout" class="btn btn-primary btn-large">Passer la commande</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

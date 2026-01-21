@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ShopEasy - Boutique{% endblock %}
+
+{% block content %}
+    <h1>Nos Produits</h1>
+    <p class="subtitle">Gagnez <strong>10 points</strong> par tranche de <strong>100$</strong> dépensés !</p>
+
+    <div class="products-grid">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    <span class="product-icon">{{ product.icon }}</span>
+                </div>
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-description">{{ product.description }}</p>
+                <p class="product-price">{{ product.price|number_format(2, '.', ' ') }} $</p>
+                <form action="/shop/add-to-cart" method="POST" class="add-to-cart-form">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <div class="quantity-input">
+                        <label for="qty-{{ product.id }}">Qté:</label>
+                        <input type="number" id="qty-{{ product.id }}" name="quantity" value="1" min="1" max="99">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Ajouter au panier</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

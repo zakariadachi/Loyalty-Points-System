@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ShopEasy - Paiement{% endblock %}
+
+{% block content %}
+    <h1>Finaliser votre commande</h1>
+
+    {% if checkout_error %}
+        <div class="alert alert-error">
+            {{ checkout_error }}
+        </div>
+    {% endif %}
+
+    <div class="checkout-layout">
+        <div class="checkout-form-container">
+            <h2>Informations de paiement</h2>
+            <p class="form-note">Simulation de paiement (données non enregistrées)</p>
+            
+            <form action="/shop/process-checkout" method="POST" class="checkout-form">
+                <div class="form-group">
+                    <label for="card_name">Nom sur la carte</label>
+                    <input type="text" id="card_name" name="card_name" placeholder="Jean Dupont" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="card_number">Numéro de carte</label>
+                    <input type="text" id="card_number" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="card_expiry">Date d'expiration</label>
+                        <input type="text" id="card_expiry" name="card_expiry" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card_cvv">CVV</label>
+                        <input type="text" id="card_cvv" name="card_cvv" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-large btn-full">
+                    Payer {{ cart_total|number_format(2, '.', ' ') }} $
+                </button>
+            </form>
+        </div>
+
+        <div class="order-summary">
+            <h2>Récapitulatif</h2>
+            
+            <div class="summary-items">
+                {% for item in cart_items %}
+                    <div class="summary-item">
+                        <span class="item-name">{{ item.name }} x {{ item.quantity }}</span>
+                        <span class="item-price">{{ (item.price * item.quantity)|number_format(2, '.', ' ') }} $</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="summary-totals">
+                <div class="summary-row total-row">
+                    <span>Total:</span>
+                    <span class="total-amount">{{ cart_total|number_format(2, '.', ' ') }} $</span>
+                </div>
+                <div class="summary-row points-row highlight">
+                    <span>Points à gagner:</span>
+                    <span class="points-earned">{{ loyalty_points }} points</span>
+                </div>
+            </div>
+
+            <div class="current-balance">
+                <p>Votre solde actuel: <strong>{{ user.loyalty_points }} points</strong></p>
+                <p>Après cet achat: <strong>{{ user.loyalty_points + loyalty_points }} points</strong></p>
+            </div>
+
+            <a href="/shop/cart" class="btn btn-secondary btn-full">Modifier le panier</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_extra %}{% endblock %}
